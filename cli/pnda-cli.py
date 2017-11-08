@@ -30,6 +30,7 @@ import datetime
 import tarfile
 import ssl
 import Queue
+import socket
 from threading import Thread
 
 import argparse
@@ -379,7 +380,8 @@ def write_ssh_config(cluster, bastion_ip, os_user, keyfile):
         config_file.write('    IdentityFile %s\n' % keyfile)
         config_file.write('    StrictHostKeyChecking no\n')
         config_file.write('    UserKnownHostsFile /dev/null\n')
-        config_file.write('    ProxyCommand ssh -i %s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %s@%s exec nc %%h %%p\n'
+        if socket.gethostbyname(socket.gethostname()) != bastion_ip:
+            config_file.write('    ProxyCommand ssh -i %s -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null %s@%s exec nc %%h %%p\n'
                           % (keyfile, os_user, bastion_ip))
 
     socks_file_path = 'cli/socks_proxy-%s' % cluster
