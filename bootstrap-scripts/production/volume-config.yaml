@@ -25,32 +25,47 @@ classes:
       - /data21 xfs
       - /data22 xfs
       - /data23 xfs
-      - /dev/xvdb2 /mnt xfs
-      - /dev/xvdb1 /var/log/pnda xfs
+      - /data24 xfs
+      - /data25 xfs
+      - /data26 xfs
+      - /dev/sdac3 /mnt xfs
+      - /dev/sdac4 /var/log/pnda xfs
       - tmpfs /tmp tmpfs nodev,nosuid
     partitions:
-      - /dev/xvdb msdos /dev/xvdb1 0GB 120GB
-      - /dev/xvdb msdos /dev/xvdb2 120GB 100%
+      - /dev/sdac msdos /dev/sdac3 269GB 389GB
+      - /dev/sdac msdos /dev/sdac4 389GB 100%
 
   generic:
     volumes:
-      - /dev/xvdb2 /mnt xfs
-      - /dev/xvdb1 /var/log/pnda xfs
+      - /dev/sda3 /mnt xfs
+      - /dev/sda4 /var/log/pnda xfs
       - tmpfs /tmp tmpfs nodev,nosuid
     partitions:
-      - /dev/xvdb msdos /dev/xvdb1 0GB 120GB
-      - /dev/xvdb msdos /dev/xvdb2 120GB 100%
+      - /dev/sda msdos /dev/sda3 269GB 389GB
+      - /dev/sda msdos /dev/sda4 389GB 100%
+
+  kafkanode:
+    volumes:
+      - /dev/sda4 /mnt xfs
+      - /dev/sda5 /var/log/pnda xfs
+      - tmpfs /tmp tmpfs nodev,nosuid
+    partitions:
+      - /dev/sda msdos /dev/sda4 269GB 389GB
+      - /dev/sda msdos /dev/sda5 389GB 100%
+
 
 instances:
   hadoop-dn: datanode
-  build: generic
+  bastion: generic
   hadoop-cm: generic
   hadoop-edge: generic
+  hadoop-mgr: generic
   hadoop-mgr-1: generic
   hadoop-mgr-2: generic
   hadoop-mgr-3: generic
   hadoop-mgr-4: generic
-  kafka: generic
+  kafka: kafkanode
   opentsdb: generic
   tools: generic
   zk: generic
+

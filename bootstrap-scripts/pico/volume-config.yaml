@@ -1,18 +1,70 @@
 classes:
   datanode:
     volumes:
-      - /data0 xfs
-      - /var/log/pnda xfs
-
-  no_additonal_volumes:
+      - /data00 xfs
+      - /data01 xfs
+      - /data02 xfs
+      - /data03 xfs
+      - /data04 xfs
+      - /data05 xfs
+      - /data06 xfs
+      - /data07 xfs
+      - /data08 xfs
+      - /data09 xfs
+      - /data10 xfs
+      - /data11 xfs
+      - /data12 xfs
+      - /data13 xfs
+      - /data14 xfs
+      - /data15 xfs
+      - /data16 xfs
+      - /data17 xfs
+      - /data18 xfs
+      - /data19 xfs
+      - /data20 xfs
+      - /data21 xfs
+      - /data22 xfs
+      - /data23 xfs
+      - /data24 xfs
+      - /data25 xfs
+      - /data26 xfs
+      - /dev/sdac3 /mnt xfs
+      - /dev/sdac4 /var/log/pnda xfs
+      - tmpfs /tmp tmpfs nodev,nosuid
+    partitions:
+      - /dev/sdac msdos /dev/sdac3 269GB 389GB
+      - /dev/sdac msdos /dev/sdac4 389GB 100%
 
   generic:
     volumes:
-      - /var/log/pnda xfs
+      - /dev/sda3 /mnt xfs
+      - /dev/sda4 /var/log/pnda xfs
+      - tmpfs /tmp tmpfs nodev,nosuid
+    partitions:
+      - /dev/sda msdos /dev/sda3 269GB 389GB
+      - /dev/sda msdos /dev/sda4 389GB 100%
+
+  kafkanode:
+    volumes:
+      - /dev/sda4 /mnt xfs
+      - /dev/sda5 /var/log/pnda xfs
+      - tmpfs /tmp tmpfs nodev,nosuid
+    partitions:
+      - /dev/sda msdos /dev/sda4 269GB 389GB
+      - /dev/sda msdos /dev/sda5 389GB 100%
+
 
 instances:
   hadoop-dn: datanode
-  bastion: no_additonal_volumes
+  bastion: generic
+  hadoop-cm: generic
   hadoop-edge: generic
   hadoop-mgr: generic
-  kafka: generic
+  hadoop-mgr-1: generic
+  hadoop-mgr-2: generic
+  hadoop-mgr-3: generic
+  hadoop-mgr-4: generic
+  kafka: kafkanode
+  opentsdb: generic
+  tools: generic
+  zk: generic
