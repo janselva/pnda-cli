@@ -84,6 +84,8 @@ rpm --import $PNDA_MIRROR/mirror_rpm/RPM-GPG-KEY-EPEL-7
 rpm --import $PNDA_MIRROR/mirror_rpm/SALTSTACK-GPG-KEY.pub
 rpm --import $PNDA_MIRROR/mirror_rpm/RPM-GPG-KEY-CentOS-7
 rpm --import $PNDA_MIRROR/mirror_rpm/RPM-GPG-KEY-Jenkins
+rpm --import $PNDA_MIRROR/mirror_rpm/influxdb.key
+
 
 PIP_INDEX_URL="$PNDA_MIRROR/mirror_python/simple"
 TRUSTED_HOST=$(echo $PIP_INDEX_URL | awk -F'[/:]' '/http:\/\//{print $4}')

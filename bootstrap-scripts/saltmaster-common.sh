@@ -157,6 +157,10 @@ mine_functions:
   network.get_hostname: []
   grains.items: []
 
+pnda_metrics:
+  PNDA_METRICS: $PNDA_METRICS
+  SPARK_ENABLED: $SPARK_ENABLED
+
 security:
   ldap_server: $LDAP_SERVER
   ldap_base_dn: $LDAP_BASE_DN

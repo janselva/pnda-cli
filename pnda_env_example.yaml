@@ -286,3 +286,7 @@ kafka:
 generic:
   #GENERIC_DEVICE_ROOT sets the disk device root name for generic instances.
   GENERIC_DEVICE_ROOT: xvdb
+
+pnda_metrics:
+  PNDA_METRICS: "NO"
+  SPARK_ENABLED: "NO"

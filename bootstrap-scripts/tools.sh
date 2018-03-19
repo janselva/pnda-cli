@@ -16,3 +16,10 @@ roles:
   - kafka_manager
   - platform_testing_general
 EOF
+if [ "x$PNDA_METRICS" == "xYES" ]; then
+  cat >> /etc/salt/grains <<EOF
+  - influxdb
+  - jetty
+  - telegraf
+EOF
+fi
