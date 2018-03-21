@@ -104,13 +104,13 @@ def select_deployment_target_impl(fields):
         fields['opentsdb_nodes'] = node_counts['opentsdb']
         fields['kafka_nodes'] = node_counts['kafka']
         fields['zk_nodes'] = node_counts['zk']
-    else:
-        os.environ['AWS_ACCESS_KEY_ID'] = PNDA_ENV['ec2_access']['AWS_ACCESS_KEY_ID']
-        os.environ['AWS_SECRET_ACCESS_KEY'] = PNDA_ENV['ec2_access']['AWS_SECRET_ACCESS_KEY']
+    elif PNDA_ENV['cloud_infrastructure']['CLOUD_INFRASTRUCTURE_TYPE'] == 'aws':
+        os.environ['AWS_ACCESS_KEY_ID'] = PNDA_ENV['aws_parameters']['AWS_ACCESS_KEY_ID']
+        os.environ['AWS_SECRET_ACCESS_KEY'] = PNDA_ENV['aws_parameters']['AWS_SECRET_ACCESS_KEY']
         print 'Using ec2 credentials:'
-        print '  AWS_REGION = %s' % PNDA_ENV['ec2_access']['AWS_REGION']
-        print '  AWS_ACCESS_KEY_ID = %s' % PNDA_ENV['ec2_access']['AWS_ACCESS_KEY_ID']
-        print '  AWS_SECRET_ACCESS_KEY = %s' % PNDA_ENV['ec2_access']['AWS_SECRET_ACCESS_KEY']
+        print '  AWS_REGION = %s' % PNDA_ENV['aws_parameters']['AWS_REGION']
+        print '  AWS_ACCESS_KEY_ID = %s' % PNDA_ENV['aws_parameters']['AWS_ACCESS_KEY_ID']
+        print '  AWS_SECRET_ACCESS_KEY = %s' % PNDA_ENV['aws_parameters']['AWS_SECRET_ACCESS_KEY']
         if not os.path.isfile('git.pem'):
             with open('git.pem', 'w') as git_key_file:
                 git_key_file.write('If authenticated access to the platform-salt git repository is required then' +
@@ -120,6 +120,9 @@ def select_deployment_target_impl(fields):
                                    'PLATFORM_GIT_REPO_URI: git@github.com:pndaproject/platform-salt.git\n')
         deployment_target = CloudFormationBackend(
             PNDA_ENV, fields['pnda_cluster'], fields["no_config_check"], fields['flavor'], fields['keyname'], fields['branch'], fields['dry_run'])
+    else:
+        CONSOLE.error('Invalid cloud infra type')
+        sys.exit(1)
     return deployment_target
 
 def main():
@@ -161,7 +164,7 @@ def main():
     fields['branch'] = branch
 
     deployment_target = select_deployment_target_impl(fields)
-    PNDA_ENV['ec2_access']['SSH_KEY'] = '%s%s' % (fields['keyname'], '.pem')
+    PNDA_ENV['cloud_infrastructure']['SSH_KEY'] = '%s%s' % (fields['keyname'], '.pem')
     write_pnda_env_sh(fields['pnda_cluster'])
 
     ###
