@@ -623,6 +623,7 @@ class BaseBackend(object):
                               % THROW_BASH_ERROR], saltmaster_ip)
 
         self._register_services(saltmaster_ip)
+        exit()
 
         CONSOLE.info('Continuing with installation of PNDA')
         salt_commands = ['(sudo salt -v --log-level=debug --timeout=120 --state-output=mixed -C "G@pnda:is_new_node" state.highstate queue=True 2>&1)' +
